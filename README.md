@@ -3,4 +3,13 @@ WeatheReact app
 
 Another weather app build with Reactjs usign [Open Weather API](http://openweathermap.org/api)
 
-![weathereact_app](https://cloud.githubusercontent.com/assets/2805320/8411462/bcf3e47e-1e8c-11e5-80f7-3ffb49509b8c.gif)
+![weathereact-app-update](https://cloud.githubusercontent.com/assets/2805320/8419117/164a78a2-1ec0-11e5-990d-1611c909d5ec.gif)
+
+
+#### Install
+
+- Clone this repo `git clone git@github.com:catalinmiron/weathereact.git`
+- `cd weathereact`
+- Install node packages `npm install`
+- Serve it locally `npm start`
+- Go to `http://localhost:3000`
