@@ -1,7 +1,8 @@
 import React from "react"
 import Skycons from "react-skycons"
-import { fetchWeather } from "./api";
-import { getIcon } from "./getIcon";
+import { fetchWeather } from "./api"
+import { getIcon } from "./getIcon"
+import randomColor from "randomcolor"
 
 import "./css/style.styl";
 
@@ -16,7 +17,8 @@ export default class App extends React.Component{
       temperature: 0,
       weatherType: "Loading...",
       weatherDescription: "Loading...",
-      icon: null
+      icon: null,
+      randomBgColor: null
     };
   }
 
@@ -28,6 +30,9 @@ export default class App extends React.Component{
     fetchWeather(this.state.city, this.state.units)
       .then((response) => {
         var weatherList = response.list[0];
+        if(weatherList.name === this.state.city) {
+          return;
+        }
 
         this.setState({
           country: weatherList.sys.country,
@@ -36,21 +41,29 @@ export default class App extends React.Component{
           weatherType: weatherList.weather[0].description,
           weatherDescription: weatherList.weather[0].main,
           icon: getIcon(weatherList.weather[0].id),
+          randomBgColor: randomColor({hue: "purple",
+                                      count: 1})
         });
       })
   }
 
   render() {
-    return <div className="weather-body">
-      <Skycons color="white" icon={this.state.icon} />
-      <h1 className="temperature">
-        {parseInt(this.state.temperature, 10)}
-      </h1>
-      <h5>
-        {this.state.city}{this.state.country ? `, ${this.state.country}` : null}
-      </h5>
-      <h3 className="description">{this.state.weatherType}</h3>
-      {this._renderForm()}
+    let style = {
+      backgroundColor: this.state.randomBgColor
+    }
+
+    return <div className="weather-container" style={style}>
+      <div className="weather-body">
+        <Skycons color="white" icon={this.state.icon} />
+        <h1 className="temperature">
+          {parseInt(this.state.temperature, 10)}
+        </h1>
+        <h5>
+          {this.state.city}{this.state.country ? `, ${this.state.country}` : null}
+        </h5>
+        <h3 className="description">{this.state.weatherType}</h3>
+        {this._renderForm()}
+      </div>;
     </div>;
   }
 
