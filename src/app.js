@@ -30,9 +30,6 @@ export default class App extends React.Component{
     fetchWeather(this.state.city, this.state.units)
       .then((response) => {
         var weatherList = response.list[0];
-        if(weatherList.name === this.state.city) {
-          return;
-        }
 
         this.setState({
           country: weatherList.sys.country,
