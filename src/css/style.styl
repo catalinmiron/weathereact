@@ -1,22 +1,25 @@
 @import "yeticss"
 
 body {
-  background-color: coral;
-  animation: background 50s 1s infinite alternate;
+  fieldset {
+    border-color: white;
+  }
 
   legend {
     color: white;
+    text-align: left;
+    font-weight: 500;
+    font-size: 16px;
   }
 
   .form-input {
     background: transparent;
     box-shadow: 0 none;
     border: 0 none;
-    border-bottom: 2px solid white;
+    border-bottom: 2px solid transparent;
     color: white;
     border-radius: 0;
-    transition: all .3s easy-in-out;
-    font-size: 52px;
+    font-size: 42px;
 
     &:focus,
     &:active {
@@ -28,59 +31,43 @@ body {
 }
 
 
-h1,h2,h3,h4,h5,h6 {
+h1, h2, h3, h4, h5, h6 {
   color: white;
 }
 
+.weather-container {
+  transition: background .4s ease-in-out;
 
-.weather-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+  .weather-body {
+    text-align: center;
+    height: 100vh;
+    width: 330px;
+    margin: 0 auto;
+    padding: 10% 0;
 
-  .temperature {
-    margin-top: 10px;
-  }
-
-  h1 {
-    margin-bottom: 0;
-    font-weight: 900;
-    font-size: 72px;
-
-    &:after {
-      content: '\2103';
-      font-weight: 100;
-      display: inline-block;
+    .temperature {
+      margin-top: 10px;
     }
-  }
-  h5 {
-    font-size: 14px;
-    font-weight: 100;
-    letter-spacing: 0.05em;
-    margin-bottom: 5px;
-  }
-  h3 {
-    font-size: 20px;
-  }
-}
 
+    h1 {
+      margin-bottom: 0;
+      font-weight: 900;
+      font-size: 72px;
 
-@keyframes background {
-  0%,5% {
-    background-color: coral;
-  }
-
-  20%,25% {
-    background-color: mediumturquoise;
-  }
-
-  50%,55% {
-    background-color: cornflowerblue;
-  }
-
-  95%,100% {
-    background-color: PaleVioletRed ;
+      &:after {
+        content: '\2103';
+        font-weight: 100;
+        display: inline-block;
+      }
+    }
+    h5 {
+      font-size: 14px;
+      font-weight: 100;
+      letter-spacing: 0.05em;
+      margin-bottom: 5px;
+    }
+    h3 {
+      font-size: 20px;
+    }
   }
 }
