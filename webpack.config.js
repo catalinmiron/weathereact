@@ -13,7 +13,6 @@ module.exports = getConfig({
             '<link href="' + data.css + '" rel="stylesheet" type="text/css" />',
           '</head>',
           '<body>',
-            '<h1>Home Page</h1>',
             '<script src="' + data.main + '"></script>',
           '</body>',
         '</html>'
