@@ -3,6 +3,7 @@ import Skycons from "react-skycons"
 import { fetchWeather } from "./api"
 import { getIcon } from "./getIcon"
 import randomColor from "randomcolor"
+import fetch from "whatwg-fetch"
 
 import "./css/style.styl";
 
