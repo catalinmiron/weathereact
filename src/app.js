@@ -61,7 +61,13 @@ export default class App extends React.Component{
         </h5>
         <h3 className="description">{this.state.weatherType}</h3>
         {this._renderForm()}
-      </div>;
+      </div>
+      <blockquote className="blockquote blockquote-centered">
+        <p>
+          Created by
+          <a href="http://twitter.com/mironcatalin"> @mironcatalin</a>
+        </p>
+      </blockquote>
     </div>;
   }
 
