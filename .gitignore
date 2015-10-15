@@ -7,4 +7,3 @@
 node_modules
 jspm_packages
 dist
-secrets.js

@@ -1,9 +1,11 @@
-import {API_KEY} from './../secrets';
+import {API_KEY} from "./../secrets";
 
-var fetchWeather = function(city, metric) {
-  let url = `http://api.openweathermap.org/data/2.5/find?q=${city}&units=${metric}&appid=${API_KEY}`;
+let apiUrl = "http://api.openweathermap.org/data/2.5/";
 
-  return fetch(url).then((response) => response.json());
+let fetchWeather = function(city) {
+
+  let weeklyWeatherUrl = `${apiUrl}/forecast/daily?q=${city}&units=metric&cnt=7&appid=${API_KEY}`
+  return fetch(weeklyWeatherUrl).then((response) => response.json());
 }
 
 

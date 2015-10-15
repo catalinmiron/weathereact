@@ -1,9 +1,11 @@
 import React from "react"
-import Skycons from "react-skycons"
 import { fetchWeather } from "./api"
 import { getIcon } from "./getIcon"
 import randomColor from "randomcolor"
 import fetch from "whatwg-fetch"
+import _ from "lodash"
+
+import WeatherItem from "./WeatherItem"
 
 import "./css/style.styl";
 
@@ -13,13 +15,9 @@ export default class App extends React.Component{
     super(props);
     this.state = {
       city: "Bucuresti",
-      country: "",
-      units: "metric",
-      temperature: 0,
-      weatherType: "Loading...",
-      weatherDescription: "Loading...",
-      icon: null,
-      randomBgColor: null
+      searchedCity: "Bucuresti",
+      randomColor: "",
+      weekWeather: []
     };
   }
 
@@ -28,40 +26,36 @@ export default class App extends React.Component{
   }
 
   getWeather() {
-    fetchWeather(this.state.city, this.state.units)
+    fetchWeather(this.state.searchedCity)
       .then((response) => {
-        var weatherList = response.list[0];
+        var weather = _.map(response.list, (dayWeather) => {
+          return {
+            country: response.city.country,
+            city: response.city.name,
+            timestamp: dayWeather.dt,
+            temperature: dayWeather.temp.max,
+            weatherType: dayWeather.weather[0].description,
+            weatherDescription: dayWeather.weather[0].main,
+            icon: getIcon(dayWeather.weather[0].id)
+          }
+        })
 
         this.setState({
-          country: weatherList.sys.country,
-          city: weatherList.name,
-          temperature: weatherList.main.temp,
-          weatherType: weatherList.weather[0].description,
-          weatherDescription: weatherList.weather[0].main,
-          icon: getIcon(weatherList.weather[0].id),
-          randomBgColor: randomColor({hue: "purple",
-                                      count: 1})
+          weekWeather: weather,
+          city: this.state.searchedCity,
+          randomColor: randomColor({luminosity: "dark", format: "hex"})
         });
       })
   }
 
   render() {
     let style = {
-      backgroundColor: this.state.randomBgColor
+      backgroundColor: this.state.randomColor
     }
 
     return <div className="weather-container" style={style}>
-      <div className="weather-body">
-        <Skycons color="white" icon={this.state.icon} />
-        <h1 className="temperature">
-          {parseInt(this.state.temperature, 10)}
-        </h1>
-        <h5>
-          {this.state.city}{this.state.country ? `, ${this.state.country}` : null}
-        </h5>
-        <h3 className="description">{this.state.weatherType}</h3>
-        {this._renderForm()}
-      </div>
+      {this._renderWeek()}
+      {this._renderForm()}
       <blockquote className="blockquote blockquote-centered">
         <p>
           Created by
@@ -71,6 +65,33 @@ export default class App extends React.Component{
     </div>;
   }
 
+  shadeColor2(color, percent) {
+    var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
+    return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
+  }
+
+  _renderWeek() {
+    return <div className="week-container">
+      <div className="week-current-day">
+        {!_.isEmpty(this.state.weekWeather) ? this._renderCurrentDay() : null}
+      </div>
+      <div className="week-all-days">
+        {_.map(this.state.weekWeather, (weather, i) => {
+          var style = {
+            backgroundColor: this.shadeColor2(this.state.randomColor, -(i + 1) / 20)
+          }
+          return <div className="week-one-day" style={style}>
+            <WeatherItem key={i} theme={"small"} weather={weather} />
+          </div>
+        })}
+      </div>
+    </div>;
+  }
+
+  _renderCurrentDay() {
+    return <WeatherItem weather={this.state.weekWeather[0]} />
+  }
+
   _renderForm() {
     return (
       <form onSubmit={this.handleSubmit.bind(this)}>
@@ -78,21 +99,26 @@ export default class App extends React.Component{
           <legend>Enter your city</legend>
           <input className="form-input"
                  type="text"
-                 onChange={this.onChange.bind(this)} value={this.state.city}/>
+                 onChange={this.onChange.bind(this)}
+                 value={this.state.searchedCity}/>
         </fieldset>
       </form>
     );
   }
 
   handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
+
+    if (this.state.searchedCity === this.state.city) {
+      return;
+    }
 
     this.getWeather();
   }
 
   onChange(e) {
     this.setState({
-      city: e.target.value
+      searchedCity: e.target.value
     });
   }
 };
