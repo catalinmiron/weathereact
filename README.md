@@ -8,7 +8,7 @@ Live demo:
 
 Another weather app build with Reactjs usign [Open Weather API](http://openweathermap.org/api)
 
-![weathereact-app-update](https://cloud.githubusercontent.com/assets/2805320/8419117/164a78a2-1ec0-11e5-990d-1611c909d5ec.gif)
+![weather-redesign-v2](https://cloud.githubusercontent.com/assets/2805320/10529403/5f098278-73a6-11e5-9e9d-807daa26762c.gif)
 
 
 #### Install
