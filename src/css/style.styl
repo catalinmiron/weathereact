@@ -235,3 +235,18 @@ $small-font-size = 24;
     }
   }
 }
+
+@media screen and (max-width: 600px) {
+  .week-container {
+    .week-all-days {
+      .weather-item {
+        &.small {
+          .temperature {
+            font-size: 22px;
+            font-weight: 300;
+          }
+        }
+      }
+    }
+  }
+}
