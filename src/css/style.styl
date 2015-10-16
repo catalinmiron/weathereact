@@ -59,7 +59,7 @@ body {
   }
 }
 
-$font-size = 142px;
+$font-size = 132px;
 $small-font-size = 24;
 
 .weather-item {
@@ -189,7 +189,7 @@ $small-font-size = 24;
   }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1000px) {
   .week-container {
 
     .week-current-day {
@@ -219,6 +219,19 @@ $small-font-size = 24;
       width: 100%;
       float: none;
       height: 40%;
+
+      .weather-item {
+        &.small {
+          .timestamp {
+            font-size: 24px;
+            margin-top: .5em;
+            margin-bottom: 1em;
+          }
+          .temperature {
+            font-weight: 300;
+          }
+        }
+      }
     }
   }
 }
