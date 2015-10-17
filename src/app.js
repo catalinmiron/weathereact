@@ -1,11 +1,12 @@
 import React from "react"
-import { fetchWeather } from "./api"
-import { getIcon } from "./getIcon"
+import { fetchWeather } from "./lib/api"
+import { getIcon } from "./lib/getIcon"
+import { shadeColor } from "./lib/shade-color"
 import randomColor from "randomcolor"
 import fetch from "whatwg-fetch"
 import _ from "lodash"
 
-import WeatherItem from "./WeatherItem"
+import WeatherItem from "./components/WeatherItem"
 
 import "./css/style.styl";
 
@@ -14,9 +15,8 @@ export default class App extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      city: "Bucuresti",
-      searchedCity: "Bucuresti",
-      randomColor: "",
+      city: "Bucharest",
+      searchedCity: "Bucharest",
       weekWeather: []
     };
   }
@@ -65,11 +65,6 @@ export default class App extends React.Component{
     </div>;
   }
 
-  shadeColor2(color, percent) {
-    var f=parseInt(color.slice(1),16),t=percent<0?0:255,p=percent<0?percent*-1:percent,R=f>>16,G=f>>8&0x00FF,B=f&0x0000FF;
-    return "#"+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
-  }
-
   _renderWeek() {
     return <div className="week-container">
       <div className="week-current-day">
@@ -78,10 +73,10 @@ export default class App extends React.Component{
       <div className="week-all-days">
         {_.map(this.state.weekWeather, (weather, i) => {
           var style = {
-            backgroundColor: this.shadeColor2(this.state.randomColor, -(i + 1) / 20)
+            backgroundColor: shadeColor(this.state.randomColor, -(i + 1) / 20)
           }
-          return <div className="week-one-day" style={style}>
-            <WeatherItem key={i} theme={"small"} weather={weather} />
+          return <div key={i} className="week-one-day" style={style}>
+            <WeatherItem theme={"small"} weather={weather} />
           </div>
         })}
       </div>
@@ -94,7 +89,7 @@ export default class App extends React.Component{
 
   _renderForm() {
     return (
-      <form onSubmit={this.handleSubmit.bind(this)}>
+      <form onSubmit={(e) => this.handleSubmit(e)}>
         <fieldset>
           <legend>Enter your city</legend>
           <input className="form-input"
