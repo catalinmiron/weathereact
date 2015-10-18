@@ -9,20 +9,14 @@ export default class WeatherItem extends React.Component {
   displayName: "WeatherItem"
 
   render() {
-    let weather = this.props.data;
-
-    let country = weather.country,
+    let weather = this.props.data,
+        country = weather.country,
         city = weather.city,
         timestamp = weather.dayWeather.dt,
         temperature = weather.dayWeather.temp.max,
         weatherType = weather.dayWeather.weather[0].description,
         weatherDescription = weather.dayWeather.weather[0].main,
         icon = weather.dayWeather.weather[0].id;
-
-    if (!weather) {
-      return <div>No data</div>
-    }
-
 
     return <div className={"weather-item " + this.props.theme}>
       <p className="location">

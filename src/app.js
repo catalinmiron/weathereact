@@ -15,8 +15,7 @@ export default class App extends React.Component{
     this.state = {
       city: "Bucharest",
       searchedCity: "Bucharest",
-      weekWeather: [],
-      isLoading: true
+      weekWeather: []
     };
   }
 
@@ -38,8 +37,7 @@ export default class App extends React.Component{
         this.setState({
           weekWeather: weather,
           city: this.state.searchedCity,
-          color: randomColor({luminosity: "dark", format: "hex"}),
-          isLoading: false
+          color: randomColor({luminosity: "dark", format: "hex"})
         });
       })
   }
@@ -47,8 +45,9 @@ export default class App extends React.Component{
   render() {
     return <div className="weather-container"
                 style={{backgroundColor: this.state.color}}>
-      <WeekWeather color={this.state.color}
-                   weekWeather={this.state.weekWeather} />
+      {_.isEmpty(this.state.weekWeather) ? "no data" :
+        <WeekWeather color={this.state.color}
+                     weekWeather={this.state.weekWeather} />}
       {this._renderForm()}
       <blockquote className="blockquote blockquote-centered">
         <p>
@@ -74,7 +73,7 @@ export default class App extends React.Component{
   }
 
   handleSubmit(e) {
-    e.preventDefault()
+    e.preventDefault();
 
     const searchedCity = this.refs.locationName.getDOMNode().value;
 
@@ -82,17 +81,7 @@ export default class App extends React.Component{
       return;
     }
 
-    this.setState({
-      isLoading: true
-    });
-
     this.getWeather(searchedCity);
-  }
-
-  onChange(e) {
-    this.setState({
-      searchedCity: e.target.value
-    });
   }
 };
 

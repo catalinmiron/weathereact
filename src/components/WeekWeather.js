@@ -12,10 +12,6 @@ export default class WeekWeather extends React.Component {
   render() {
     const color = this.props.color;
 
-    if (_.isEmpty(this.props.weekWeather)) {
-      return <div>no data</div>
-    }
-
     return <div className="week-container">
       <div className="week-current-day">
         <WeatherItem data={this.props.weekWeather[0]} />
