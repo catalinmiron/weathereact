@@ -2,29 +2,43 @@ import React from "react"
 import Skycons from "react-skycons"
 import Moment from "moment"
 import NumberEasing from "react-number-easing"
+import { getIcon } from "./../utils/getIcon"
 
 
 export default class WeatherItem extends React.Component {
   displayName: "WeatherItem"
 
   render() {
-    let weather = this.props.weather;
+    let weather = this.props.data;
+
+    let country = weather.country,
+        city = weather.city,
+        timestamp = weather.dayWeather.dt,
+        temperature = weather.dayWeather.temp.max,
+        weatherType = weather.dayWeather.weather[0].description,
+        weatherDescription = weather.dayWeather.weather[0].main,
+        icon = weather.dayWeather.weather[0].id;
+
+    if (!weather) {
+      return <div>No data</div>
+    }
+
 
     return <div className={"weather-item " + this.props.theme}>
       <p className="location">
-        <span className="city">{weather.city}</span>
-        <span className="country">{weather.country ? `, ${weather.country}` : null}</span>
+        <span className="city">{city}</span>
+        <span className="country">{country ? `, ${country}` : null}</span>
       </p>
-      <Skycons color="white" icon={weather.icon} />
+      <Skycons color="white" icon={getIcon(icon)} />
       {this._renderDayName()}
       <div className="temperature-info">
         <p className="temperature">
-          <NumberEasing value={Math.round(weather.temperature)}
+          <NumberEasing value={Math.round(temperature)}
                         speed={1200}
                         ease='circInOut'/>
           °C
         </p>
-        <p className="info">{weather.weatherType}</p>
+        <p className="info">{weatherType}</p>
       </div>
     </div>
   }
@@ -37,8 +51,9 @@ export default class WeatherItem extends React.Component {
       lastDay: "ddd",
       lastWeek: "ddd"
     }
+
     return <p className="timestamp">
-      {Moment(this.props.weather.timestamp * 1000).calendar(null, days)}
+      {Moment(this.props.data.dayWeather.dt * 1000).calendar(null, days)}
     </p>
   }
 }

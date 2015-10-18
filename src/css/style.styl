@@ -189,6 +189,10 @@ $small-font-size = 24;
   }
 }
 
+for num in ( 1..7 )
+ .week-one-day:nth-child({num})
+    background rgba(0,0,0,(num / 10))
+
 @media screen and (max-width: 1000px) {
   .week-container {
 
