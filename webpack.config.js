@@ -14,7 +14,7 @@ module.exports = getConfig({
             '<meta charset="UTF-8">',
             '<meta name="viewport" content="width=device-width, initial-scale=1">',
             '<link href="' + data.css + '" rel="stylesheet" type="text/css" />',
-            '<title>Weather app built with reactjs</title>'
+            '<title>Weather app built with reactjs</title>',
           '</head>',
           '<body>',
             '<script src="' + data.main + '"></script>',
