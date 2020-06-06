@@ -1,4 +1,4 @@
-var getIcon = function(id) {
+const  getIcon = (id) => {
   if(id >= 200 && id < 300){
     return "RAIN";
   } else if (id >= 300 && id < 500){
@@ -22,4 +22,4 @@ var getIcon = function(id) {
   }
 }
 
-export { getIcon }
+export default { getIcon }

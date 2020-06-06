@@ -1,89 +1,65 @@
-import React from "react"
-import { fetchWeather } from "./utils/api"
-import fetch from "whatwg-fetch"
-import _ from "lodash"
-import randomColor from "randomcolor";
 
-import WeekWeather from "./components/WeekWeather"
+import React, { useState, useEffect } from 'react'
+import { fetchWeather } from './utils/api'
+import randomColor from 'randomcolor'
+import WeekWeather from './components/WeekWeather'
 
-import "./css/style.styl";
+import './css/style.styl'
 
+const App = () => {
+  const [city, setCity] = useState('Bucharest')
+  const [country, setCountry] = useState('')
+  const [search, setSearch] = useState('Bucharest')
+  const [weather, setWeather] = useState([])
+  const [color, setColor] = useState('')
 
-export default class App extends React.Component{
-  constructor(props) {
-    super(props);
-    this.state = {
-      city: "Bucharest",
-      searchedCity: "Bucharest",
-      weekWeather: []
-    };
-  }
-
-  componentWillMount() {
-    this.getWeather();
-  }
-
-  getWeather(searchedCity = this.state.city) {
+  const getWeather = (searchedCity) => {
     fetchWeather(searchedCity)
-      .then((response) => {
-        var weather = _.map(response.list, (dayWeather) => {
-          return {
-            dayWeather,
-            country: response.city.country,
-            city: response.city.name
-          }
-        });
-
-        this.setState({
-          weekWeather: weather,
-          city: this.state.searchedCity,
-          color: randomColor({luminosity: "dark", format: "hex"})
-        });
-      })
+    .then(res => {
+      const weatherData = res.list.map(weatherOfDay => weatherOfDay)
+      setWeather(weatherData)
+      setCity(searchedCity)
+      setCountry(res.city.country)
+      setColor(randomColor({luminosity: "dark", format: "hex"}))
+    })
   }
 
-  render() {
-    return <div className="weather-container"
-                style={{backgroundColor: this.state.color}}>
-      {_.isEmpty(this.state.weekWeather) ? "no data" :
-        <WeekWeather color={this.state.color}
-                     weekWeather={this.state.weekWeather} />}
-      {this._renderForm()}
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const searchedCity = event.target.value;
+
+    if (searchedCity === city) {
+      return;
+    }
+    setSearch(searchedCity)
+  }
+
+  const renderForm = () => {
+    return (
+      <form onSubmit={handleSubmit}>
+        <fieldset>
+          <legend>Enter your city</legend>
+          <input className="form-input" ref="locationName" type="text" defaultValue={search}/>
+        </fieldset>
+      </form>
+    );
+  }
+
+  useEffect(getWeather, [search])
+
+  return (
+    <div className="weather-container" style={{backgroundColor: color}}>
+      {weather.length === 0 ? "no data" : <WeekWeather color={color} weather={weather} city={city} country={country}/>}
+      {renderForm()}
       <blockquote className="blockquote blockquote-centered">
         <p>
           Created by
           <a href="http://twitter.com/mironcatalin"> @mironcatalin</a>
         </p>
       </blockquote>
-    </div>;
-  }
+    </div>
+  )
+}
 
-  _renderForm() {
-    return (
-      <form onSubmit={(e) => this.handleSubmit(e)}>
-        <fieldset>
-          <legend>Enter your city</legend>
-          <input className="form-input"
-                 ref="locationName"
-                 type="text"
-                 defaultValue={this.state.searchedCity}/>
-        </fieldset>
-      </form>
-    );
-  }
-
-  handleSubmit(e) {
-    e.preventDefault();
-
-    const searchedCity = this.refs.locationName.getDOMNode().value;
-
-    if (searchedCity === this.state.city) {
-      return;
-    }
-
-    this.getWeather(searchedCity);
-  }
-};
-
-
-React.render(<App />, document.body);
+export default App
