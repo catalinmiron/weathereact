@@ -13,6 +13,51 @@ const App = () => {
   const [weather, setWeather] = useState([])
   const [color, setColor] = useState('')
 
+  const [address, setAddress] = useState({})
+  const [coords, setCoords] = useState({})
+
+  const shortCoord = (coord) => {
+    return coord.substr(0, coord.indexOf('.') + 7)
+  }
+
+  const showPosition = (position) => {
+    const latlng = {}
+    latlng['latitude'] = shortCoord(position.coords.latitude.toString())
+    latlng['longitude'] = shortCoord(position.coords.longitude.toString())
+    // console.log(latlng)
+    setCoords(latlng)
+  }
+  
+  const getCoords = () => {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  }
+
+  const getAddress = () => {
+    if(Object.keys(coords).length !== 0) {
+      const API_URL = `${process.env.REACT_APP_ADD_URL}q=${coords.latitude}+${coords.longitude}&key=${process.env.REACT_APP_ADD_KEY}`
+
+      fetch(API_URL)
+      .then(res => res.json())
+      .then(data => {
+        // console.log(data)
+        const addr = {}
+        if(data.results[0].components.city !== undefined)
+          addr['city'] = data.results[0].components.city
+        else {
+          addr['village'] = data.results[0].components.village
+        }
+        addr['countryCode'] = data.results[0].components['ISO_3166-1_alpha-2']
+        addr['country'] = data.results[0].components.country
+        // console.log(addr)
+        setAddress(addr)
+      })
+      .catch(err => console.log(err))
+    }
+  }
+
+  useEffect(getCoords, [])
+  useEffect(getAddress, [coords])
+
   const getWeather = (searchedCity) => {
     fetchWeather(searchedCity)
     .then(res => {
